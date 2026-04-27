@@ -5,7 +5,8 @@ import { updateUser } from '../../services/slices/userSlice';
 
 export const Profile: FC = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
+  
+  const { user, loginUserError, registerUserError } = useSelector((state) => state.user);
 
   const [formValue, setFormValue] = useState({
     name: user?.name || '',
@@ -57,6 +58,7 @@ export const Profile: FC = () => {
     <ProfileUI
       formValue={formValue}
       isFormChanged={isFormChanged}
+      updateUserError={loginUserError || registerUserError || ''}
       handleCancel={handleCancel}
       handleSubmit={handleSubmit}
       handleInputChange={handleInputChange}

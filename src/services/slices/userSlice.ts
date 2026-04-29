@@ -7,6 +7,7 @@ import {
   updateUserApi,
   logoutApi
 } from '@api';
+import { setCookie, deleteCookie } from '../../utils/cookie';
 
 type TUserState = {
   user: TUser | null;
@@ -54,28 +55,60 @@ const userSlice = createSlice({
         state.isAuthChecked = true;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
+        console.log('LOGIN SUCCESS - Payload:', action.payload);
+        console.log('accessToken:', action.payload.accessToken);
+        console.log('refreshToken:', action.payload.refreshToken);
+
         state.user = action.payload.user;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
         state.loginUserError = null;
+
+        // Сохраняем токены
+        setCookie('accessToken', action.payload.accessToken);
+        localStorage.setItem('refreshToken', action.payload.refreshToken);
+
+        console.log('Cookie после setCookie:', document.cookie);
+        console.log(
+          'LocalStorage после setItem:',
+          localStorage.getItem('refreshToken')
+        );
       })
       .addCase(loginUser.rejected, (state, action) => {
+        console.error('LOGIN FAILED:', action.error);
         state.loginUserError = action.error.message || 'Ошибка входа';
         state.isAuthChecked = true;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
+        console.log('REGISTER SUCCESS - Payload:', action.payload);
+
         state.user = action.payload.user;
         state.isAuthenticated = true;
         state.isAuthChecked = true;
         state.registerUserError = null;
+
+        // Сохраняем токены
+        setCookie('accessToken', action.payload.accessToken);
+        localStorage.setItem('refreshToken', action.payload.refreshToken);
+
+        // Проверяем
+        console.log('Cookie после регистрации:', document.cookie);
+        console.log(
+          'LocalStorage после регистрации:',
+          localStorage.getItem('refreshToken')
+        );
       })
       .addCase(registerUser.rejected, (state, action) => {
+        console.error('REGISTER FAILED:', action.error);
         state.registerUserError = action.error.message || 'Ошибка регистрации';
         state.isAuthChecked = true;
       })
       .addCase(logoutUser.fulfilled, (state) => {
+        console.log('LOGOUT');
         state.user = null;
         state.isAuthenticated = false;
+        deleteCookie('accessToken');
+        localStorage.removeItem('refreshToken');
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.user = action.payload.user;

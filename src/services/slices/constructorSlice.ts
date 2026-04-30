@@ -35,12 +35,19 @@ const constructorSlice = createSlice({
     },
     moveIngredient: (
       state,
-      action: PayloadAction<{ from: number; to: number }>
+      action: PayloadAction<{ index: number; direction: 'up' | 'down' }>
     ) => {
-      const { from, to } = action.payload;
-      const ingredient = state.ingredients[from];
-      state.ingredients.splice(from, 1);
-      state.ingredients.splice(to, 0, ingredient);
+      const { index, direction } = action.payload;
+
+      if (direction === 'up' && index > 0) {
+        const temp = state.ingredients[index];
+        state.ingredients[index] = state.ingredients[index - 1];
+        state.ingredients[index - 1] = temp;
+      } else if (direction === 'down' && index < state.ingredients.length - 1) {
+        const temp = state.ingredients[index];
+        state.ingredients[index] = state.ingredients[index + 1];
+        state.ingredients[index + 1] = temp;
+      }
     },
     clearConstructor: (state) => {
       state.bun = null;

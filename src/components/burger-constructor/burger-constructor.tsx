@@ -1,10 +1,14 @@
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useSelector, useDispatch } from '../../services/store';
 import { createOrder, clearOrder } from '../../services/slices/orderSlice';
-import { clearConstructor } from '../../services/slices/constructorSlice';
+import {
+  clearConstructor,
+  moveIngredient,
+  removeIngredient
+} from '../../services/slices/constructorSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -37,6 +41,29 @@ export const BurgerConstructor: FC = () => {
     dispatch(clearOrder());
   };
 
+  // Вместо onMoveUp, onMoveDown, onRemove создай такие функции:
+
+  const onMoveUp = useCallback(
+    (index: number) => {
+      dispatch(moveIngredient({ index, direction: 'up' }));
+    },
+    [dispatch]
+  );
+
+  const onMoveDown = useCallback(
+    (index: number) => {
+      dispatch(moveIngredient({ index, direction: 'down' }));
+    },
+    [dispatch]
+  );
+
+  const onRemove = useCallback(
+    (id: string) => {
+      dispatch(removeIngredient(id));
+    },
+    [dispatch]
+  );
+
   const price = useMemo(
     () =>
       (constructorItems.bun ? constructorItems.bun.price * 2 : 0) +
@@ -55,6 +82,9 @@ export const BurgerConstructor: FC = () => {
       orderModalData={orderModalData}
       onOrderClick={onOrderClick}
       closeOrderModal={closeOrderModal}
+      onMoveUp={onMoveUp}
+      onMoveDown={onMoveDown}
+      onRemove={onRemove}
     />
   );
 };

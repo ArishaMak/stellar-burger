@@ -16,7 +16,10 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   price,
   orderModalData,
   onOrderClick,
-  closeOrderModal
+  closeOrderModal,
+  onMoveUp,
+  onMoveDown,
+  onRemove
 }) => (
   <section className={styles.burger_constructor}>
     {constructorItems.bun ? (
@@ -45,6 +48,9 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
               index={index}
               totalItems={constructorItems.ingredients.length}
               key={item.id}
+              onMoveUp={onMoveUp}
+              onMoveDown={onMoveDown}
+              onRemove={onRemove}
             />
           )
         )
@@ -86,7 +92,6 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         onClick={onOrderClick}
       />
     </div>
-    {/* Прелоадер в данном месте в "Можно лучше" */}
     {orderRequest && (
       <Modal onClose={closeOrderModal} title={'Оформляем заказ...'}>
         <Preloader />

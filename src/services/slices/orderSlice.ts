@@ -6,6 +6,7 @@ type TOrderState = {
   order: TOrder | null;
   orderRequest: boolean;
   orderModalData: TOrder | null;
+  orderByNumber: TOrder | null;
   error: string | null;
 };
 
@@ -13,6 +14,7 @@ const initialState: TOrderState = {
   order: null,
   orderRequest: false,
   orderModalData: null,
+  orderByNumber: null,
   error: null
 };
 
@@ -39,6 +41,7 @@ const orderSlice = createSlice({
     clearOrder: (state) => {
       state.order = null;
       state.orderModalData = null;
+      state.orderByNumber = null;
       state.error = null;
     }
   },
@@ -62,7 +65,7 @@ const orderSlice = createSlice({
       })
       .addCase(fetchOrderByNumber.fulfilled, (state, action) => {
         state.orderRequest = false;
-        state.orderModalData = action.payload;
+        state.orderByNumber = action.payload;
       })
       .addCase(fetchOrderByNumber.rejected, (state, action) => {
         state.orderRequest = false;

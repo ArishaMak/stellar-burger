@@ -10,7 +10,7 @@ import { fetchIngredients } from '../../services/slices/ingredientsSlice';
 export const OrderInfo: FC = () => {
   const dispatch = useDispatch();
   const { number } = useParams<{ number: string }>();
-  const { orderModalData, orderRequest } = useSelector((state) => state.order);
+  const { orderRequest, orderByNumber } = useSelector((state) => state.order);
   const ingredients = useSelector((state) => state.ingredients.ingredients);
 
   useEffect(() => {
@@ -19,15 +19,15 @@ export const OrderInfo: FC = () => {
   }, [dispatch, number]);
 
   const orderInfo = useMemo(() => {
-    if (!orderModalData || !ingredients.length) return null;
+    if (!orderByNumber || !ingredients.length) return null;
 
-    const date = new Date(orderModalData.createdAt);
+    const date = new Date(orderByNumber.createdAt);
 
     type TIngredientsWithCount = {
       [key: string]: TIngredient & { count: number };
     };
 
-    const ingredientsInfo = orderModalData.ingredients.reduce(
+    const ingredientsInfo = orderByNumber.ingredients.reduce(
       (acc: TIngredientsWithCount, item) => {
         if (!acc[item]) {
           const ingredient = ingredients.find((ing) => ing._id === item);
@@ -46,8 +46,8 @@ export const OrderInfo: FC = () => {
       0
     );
 
-    return { ...orderModalData, ingredientsInfo, date, total };
-  }, [orderModalData, ingredients]);
+    return { ...orderByNumber, ingredientsInfo, date, total };
+  }, [orderByNumber, ingredients]);
 
   if (orderRequest || !orderInfo) return <Preloader />;
 

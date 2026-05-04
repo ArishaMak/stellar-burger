@@ -1,0 +1,14 @@
+{
+  "success": true,
+  "name": "Test Order",
+  "order": {
+    "_id": "60b2543d4e5d2b001c8674e2",
+    "status": "done",
+    "name": "Test Order",
+    "createdAt": "2021-05-29T09:31:08.629Z",
+    "updatedAt": "2021-05-29T09:31:08.629Z",
+    "number": 12345,
+    "ingredients": ["01", "02"],
+    "total": 283
+  }
+}

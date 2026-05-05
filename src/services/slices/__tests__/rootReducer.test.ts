@@ -22,7 +22,13 @@ describe('rootReducer', () => {
         orderByNumber: null,
         error: null
       },
-      feed: expect.any(Object),
+      feed: {
+        orders: [],
+        total: 0,
+        totalToday: 0,
+        isLoading: false,
+        error: null
+      },
       user: {
         user: null,
         isAuthenticated: false,
@@ -30,6 +36,6 @@ describe('rootReducer', () => {
         loginUserError: null,
         registerUserError: null
       }
-    } as RootState);
+    } as unknown as RootState);
   });
 });
